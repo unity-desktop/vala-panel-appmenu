@@ -1,0 +1,10 @@
+# In-place build state.
+/.debhelper/
+/debhelper-build-stamp
+/files
+/*.substvars
+/*.debhelper.log
+/tmp/
+/libappmenu-glib-translator0/
+/libappmenu-glib-translator-dev/
+/gir1.2-appmenuglibtranslator-24.02/

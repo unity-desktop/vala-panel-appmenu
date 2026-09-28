@@ -1,0 +1,44 @@
+---
+name: appmenu-glib-translator
+
+on:
+  push:
+    branches: [ubuntu/latest]
+    paths: &paths
+      - subprojects/appmenu-glib-translator/**
+      - .github/workflows/appmenu-glib-translator.yaml
+  pull_request:
+    branches: [ubuntu/latest]
+    types: [opened, synchronize, reopened, closed]
+    paths: *paths
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  build:
+    if: github.event.action != 'closed'
+    uses: unity-desktop/workflows/.github/workflows/build-deb.yaml@main
+    with:
+      path: subprojects/appmenu-glib-translator
+      orig-source: true
+      release-branch: ubuntu/latest
+
+  release:
+    needs: build
+    if: github.event_name != 'pull_request' && github.ref_name == 'ubuntu/latest'
+    uses: unity-desktop/workflows/.github/workflows/release-deb.yaml@main
+    with:
+      path: subprojects/appmenu-glib-translator
+
+  purge:
+    needs: build
+    if: >-
+      !cancelled() && (
+        github.event_name == 'push' && needs.build.result == 'success' ||
+        github.event.action == 'closed' && !github.event.pull_request.merged)
+    uses: unity-desktop/workflows/.github/workflows/purge-deb.yaml@main
+    with:
+      path: subprojects/appmenu-glib-translator

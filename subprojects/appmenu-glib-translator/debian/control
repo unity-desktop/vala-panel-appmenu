@@ -1,0 +1,73 @@
+Source: appmenu-glib-translator
+Section: libs
+Priority: optional
+Maintainer: Muqtadir <contact@muqtxdir.com>
+Build-Depends:
+ debhelper-compat (= 13),
+ dh-sequence-gir,
+ meson (>= 0.61.0),
+ ninja-build,
+ pkgconf,
+ valac,
+ gobject-introspection,
+ libgirepository-2.0-dev,
+ libgirepository1.0-dev,
+ libglib2.0-dev (>= 2.52.0),
+ libgdk-pixbuf-2.0-dev,
+Standards-Version: 4.7.0
+Homepage: https://gitlab.com/vala-panel-project/vala-panel-appmenu
+Rules-Requires-Root: no
+Vcs-Browser: https://github.com/unity-desktop/vala-panel-appmenu/tree/ubuntu/latest/subprojects/appmenu-glib-translator
+Vcs-Git: https://github.com/unity-desktop/vala-panel-appmenu.git -b ubuntu/latest [subprojects/appmenu-glib-translator]
+
+Package: libappmenu-glib-translator0
+Architecture: any
+Multi-Arch: same
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: translator from the DBusMenu protocol to GMenuModel
+ This library imports a menu exported over the com.canonical.dbusmenu
+ interface and presents it as a GMenuModel, so that a GTK application can
+ render a remote application menu.
+ .
+ Both Debian and Ubuntu link this library statically into the vala-panel
+ appmenu applet and expose no part of it, so it is built here instead.
+ .
+ This package contains the shared library.
+
+Package: libappmenu-glib-translator-dev
+Section: libdevel
+Architecture: any
+Multi-Arch: same
+Provides: ${gir:Provides}
+Depends:
+ libappmenu-glib-translator0 (= ${binary:Version}),
+ gir1.2-appmenuglibtranslator-24.02 (= ${binary:Version}),
+ libglib2.0-dev,
+ libgdk-pixbuf-2.0-dev,
+ ${gir:Depends},
+ ${misc:Depends},
+Description: translator from the DBusMenu protocol to GMenuModel (development files)
+ This library imports a menu exported over the com.canonical.dbusmenu
+ interface and presents it as a GMenuModel.
+ .
+ The pkg-config file names gio-unix-2.0 and gdk-pixbuf-2.0 in Requires, so
+ both of their development packages are dependencies here.
+ .
+ This package contains the headers, the pkg-config file, the GIR XML and the
+ Vala bindings.
+
+Package: gir1.2-appmenuglibtranslator-24.02
+Section: introspection
+Architecture: any
+Multi-Arch: same
+Depends:
+ libappmenu-glib-translator0 (= ${binary:Version}),
+ ${gir:Depends},
+ ${shlibs:Depends},
+ ${misc:Depends},
+Description: GObject introspection data for the DBusMenu to GMenuModel translator
+ This library imports a menu exported over the com.canonical.dbusmenu
+ interface and presents it as a GMenuModel.
+ .
+ This package contains the introspection typelib, for language bindings that
+ load it at run time.

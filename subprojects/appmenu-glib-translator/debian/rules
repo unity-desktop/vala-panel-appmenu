@@ -1,0 +1,27 @@
+#!/usr/bin/make -f
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+
+%:
+	dh $@ --buildsystem=meson
+
+override_dh_missing:
+	dh_missing --list-missing
+
+# The orig tarball is this subproject's directory, taken from git: upstream
+# releases the whole vala-panel-appmenu tree, but only this standalone meson
+# project is built here. The directory holds no symlinks, so nothing has to be
+# dereferenced.
+include /usr/share/dpkg/pkg-info.mk
+ORIG := ../$(DEB_SOURCE)_$(DEB_VERSION_UPSTREAM).orig.tar.xz
+
+# A failed git ls-files must fail the target, not leave an empty tarball.
+get-orig-source: SHELL := /bin/bash
+get-orig-source: .SHELLFLAGS := -o pipefail -c
+get-orig-source:
+	git ls-files -z -- . ':!debian' \
+	  | tar --null -T - --sort=name \
+	        --mtime=@$(SOURCE_DATE_EPOCH) --owner=0 --group=0 --numeric-owner \
+	        --transform 's,^,$(DEB_SOURCE)-$(DEB_VERSION_UPSTREAM)/,' -cf - \
+	  | xz -6 -T1 > $(ORIG)
+
+.PHONY: get-orig-source

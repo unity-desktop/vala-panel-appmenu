@@ -1,0 +1,13 @@
+appmenu-glib-translator (24.02-1) stonking; urgency=medium
+
+  * Initial packaging, from the unity-desktop/vala-panel-appmenu fork (DEP-14
+    layout: debian/ lives beside the subproject on the ubuntu/latest branch).
+  * Built from upstream tag 25.04. That is the release name of the whole tree;
+    this subproject still declares 24.02, which is what the SONAME, the
+    pkg-config Version and the GIR nsversion all carry, so the package follows
+    24.02. Rename gir1.2-appmenuglibtranslator-24.02 when upstream bumps it.
+  * Neither Debian nor Ubuntu exposes this library: both link it statically
+    into the vala-panel appmenu applet. astal-tray and unity-panel need its
+    pkg-config module.
+
+ -- Muqtadir <contact@muqtxdir.com>  Mon, 28 Sep 2026 05:30:00 +0530
